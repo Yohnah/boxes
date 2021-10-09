@@ -1,2 +1,2 @@
 # boxes
-Vagrant boxes code to build with Hashicorp Packer
+Vagrant boxes code to build on Hashicorp Packer
