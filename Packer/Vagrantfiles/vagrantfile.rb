@@ -14,7 +14,7 @@ end
 
 Vagrant.configure(2) do |config|
   config.vm.post_up_message = $msg
-  config.ssh.shell = '/bin/ash'
+  config.ssh.shell = '/bin/sh'
 
   config.vm.provider "virtualbox" do |vb, override|
     vb.memory = 2048

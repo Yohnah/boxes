@@ -1,0 +1,25 @@
+#cloud-config
+autoinstall:
+  version: 1
+  identity:
+    hostname: vagrant
+    username: vagrant
+    # Generated via: printf vagrant | mkpasswd -m sha-512 -S vagrant. -s
+    password: "$6$vagrant.$sd6r0/OKL.FIGZbhanVkrLassSxoPRv1h5lkISsmBONqaLUGVXkEcD22Ddak5W8JSxeU0VFkU/We1Y7o4hVO/1"
+  early-commands:
+    # otherwise packer tries to connect and exceed max attempts:
+    - systemctl stop ssh
+  ssh:
+    install-server: true 
+  late-commands:
+    - curtin in-target --target /target -- rm -rf /var/lib/apt/lists
+    - curtin in-target --target /target -- apt-get update
+    - curtin in-target --target /target -- sed -i -e '/Defaults\s\+env_reset/a Defaults\texempt_group=sudo' /etc/sudoers
+    - echo 'vagrant ALL=(ALL) NOPASSWD:ALL' > /target/etc/sudoers.d/99_vagrant
+    - curtin in-target --target /target -- chmod 440 /etc/sudoers.d/99_vagrant
+%{ for pkg in packages ~}
+    - curtin in-target --target /target -- apt-get -y install ${pkg}
+%{ endfor ~}
+    - curtin in-target --target /target -- apt-get -y autoremove
+    - curtin in-target --target /target -- apt-get autoclean
+    - curtin in-target --target /target -- apt-get clean

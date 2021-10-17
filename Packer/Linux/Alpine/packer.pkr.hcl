@@ -73,7 +73,7 @@ source "virtualbox-iso" "alpine" {
     ssh_timeout = "10m"
     ssh_username = local.ssh_username
     virtualbox_version_file = ".vbox_version"
-    output_directory = "${var.output_directory}/output/${local.vm_name}/virtualbox-iso/output"
+    output_directory = "${var.output_directory}/packer-build/output/artifacts/${local.vm_name}/${local.version}/virtualbox/"
     vboxmanage = [
         ["modifyvm", "{{.Name}}", "--vram", "128"],
         ["modifyvm", "{{.Name}}", "--graphicscontroller", "vmsvga"],
@@ -81,8 +81,6 @@ source "virtualbox-iso" "alpine" {
         ["modifyvm", "{{.Name}}", "--rtcuseutc", "on"]
     ]
 }
-
-
 
 build {
     name = "builder"
@@ -99,7 +97,7 @@ build {
     post-processors {
         post-processor "vagrant" {
           keep_input_artifact = false
-          output = "${var.output_directory}/output/boxes/{{.Provider}}/{{.BuildName}}.box"
+          output = "${var.output_directory}/output/${local.vm_name}/{{.Provider}}/boxes/{{.BuildName}}.box"
           vagrantfile_template = "${path.root}/../../Vagrantfiles/vagrantfile.rb"
         }
 
