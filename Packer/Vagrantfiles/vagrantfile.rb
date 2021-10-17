@@ -2,7 +2,7 @@
 # vi: set ft=ruby :
 
 $msg = <<MSG
-Welcome to Alpine Linux box for Vagrant by Yohnah
+Welcome to Linux box for Vagrant by Yohnah
 
 MSG
 
